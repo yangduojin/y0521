@@ -1,0 +1,23 @@
+server:
+  port: 18084
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user-service-route
+#          uri: http://localhost:18081
+          uri: lb://user-provider
+          predicates:
+            - Path=/**
+          filters:
+            - PrefixPath=/hello
+            - MyParam
+      default-filters:
+        # 往响应过滤器中加入信息
+        - AddResponseHeader=X-Response-Default-MyName,atguigu
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka # EurekaServer的地址
